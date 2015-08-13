@@ -101,6 +101,7 @@ if __name__ == '__main__':
     parser.add_argument('-l', '--list',    action='store_true',    help='List files on device')
     parser.add_argument('-w', '--wipe',    action='store_true',    help='Delete all lua/lc files on device.')
     parser.add_argument('-T', '--terminal',action='store_true',    help='Keep terminal open after upload and print program output')
+    parser.add_argument('-W', '--strip-whitespace',dest='strip',action='store_true',help='Remove leading/trailing whitespace, empty lines and comments')
     args = parser.parse_args()
 
     # Open the selected serial port
@@ -184,12 +185,22 @@ if __name__ == '__main__':
             writeln("file.open(\"" + args.dest + "\", \"a+\")\r")
         else:
             writeln("file.open(\"" + args.dest + "\", \"w+\")\r")
-        line = f.readline()
+
         if args.verbose:
             sys.stderr.write("\r\nStage 3. Start writing data to flash memory...")
-        while line != '':
-            writer(line.strip())
+        print(dir(args))
+
+        while True:
             line = f.readline()
+            if not line:
+                break
+            line = line.strip()
+            if args.strip:
+                if line.startswith("--") or len(line) == 0:
+                    # Comment or empty line -> skip
+                    #print("\n# %s" % line)
+                    continue
+            writer(line)
 
         # close both files
         f.close()
