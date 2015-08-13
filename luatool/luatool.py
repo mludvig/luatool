@@ -100,6 +100,7 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--append',  action='store_true',    help='Append source file to destination file.')
     parser.add_argument('-l', '--list',    action='store_true',    help='List files on device')
     parser.add_argument('-w', '--wipe',    action='store_true',    help='Delete all lua/lc files on device.')
+    parser.add_argument('-T', '--terminal',action='store_true',    help='Keep terminal open after upload and print program output')
     args = parser.parse_args()
 
     # Open the selected serial port
@@ -209,6 +210,13 @@ if __name__ == '__main__':
         writeln("node.restart()\r")
     if args.dofile:   # never exec if restart=1
         writeln("dofile(\"" + args.dest + "\")\r", 0)
+
+    if args.terminal:
+        s.timeout = 1
+        while True:
+            line = s.readline()
+            if line:
+                print line,
 
     # close serial port
     s.flush()
