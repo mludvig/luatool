@@ -34,7 +34,7 @@ def writeln(data, check=1):
         sys.stdout.write("\r\n->")
         sys.stdout.write(data.split("\r")[0])
     s.write(data)
-    sleep(0.3)
+    sleep(0.2)
     if check > 0:
         line = ''
         char = ''
@@ -188,7 +188,6 @@ if __name__ == '__main__':
 
         if args.verbose:
             sys.stderr.write("\r\nStage 3. Start writing data to flash memory...")
-        print(dir(args))
 
         while True:
             line = f.readline()
