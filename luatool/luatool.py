@@ -219,8 +219,10 @@ if __name__ == '__main__':
     # restart or dofile
     if args.restart:
         writeln("node.restart()\r")
+
     if args.dofile:   # never exec if restart=1
-        writeln("dofile(\"" + args.dest + "\")\r", 0)
+        dofile_name = args.compile and args.dest.replace(".lua", ".lc") or args.dest
+        writeln("dofile(\"" + dofile_name + "\")\r", 0)
 
     if args.terminal:
         s.timeout = 1
